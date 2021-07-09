@@ -5,6 +5,7 @@ import json
 import pygame
 import pygame.camera
 import time
+from gpiozero import Servo
 
 
 def ReadQR():
