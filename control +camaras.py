@@ -58,18 +58,26 @@ def desplazar(arr_ruta):
     for event in arr_ruta: 
         if event == 'w':
             print("Adelante")
+            servo_left.max()
+            servo_right.min()
             time.sleep(0.5)
         
         elif event == 's':
             print("Atras")
+            servo_left.min()
+            servo_right.max()
             time.sleep(0.5)
             
         elif event == 'a':
             print("Izquierda")
+            servo_left.min()
+            servo_right.min()
             time.sleep(0.5)
             
         elif 'd':
             print("Derecha")
+            servo_right.max()
+            servo_left.max()
             time.sleep(0.5)
             
         elif event.key == pygame.K_SPACE:
