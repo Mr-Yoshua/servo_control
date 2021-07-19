@@ -7,13 +7,15 @@ import pygame.camera
 import time
 from gpiozero import Servo
 
+def cleanRoute():
+    return []
 
 def ReadQR():
-    #img = cv2.imread('QR-Images/qrcode1.png')
-    # Establecer lectura por camara
+
     cap = cv2.VideoCapture(0)
     cap.set(3,640)
     cap.set(4,480)  
+    arr_ruta = []
     while True:
         ## mientras se pueda acceder a camara leer codigo QR desde camara, qr data es el contenido pts es para crear un cuadrado que limita el QR que se obtienen las dim desde
         # los datos de lectura, se utiliza para esta accion numpy
@@ -26,16 +28,12 @@ def ReadQR():
             
             final_data = json.loads(dataexample)
            
-
             nombre_lectura = final_data["nombrePaciente"]
             box_lectura = final_data["numeroBox"]
             ruta_lectura = final_data["ruta"]
-            arr_ruta= ruta_lectura.split(',')
+            arr_ruta = ruta_lectura.split(',')
             print("Ruta :" + arr_ruta[0])
             #Settings para proyectar en pantalla
-            if arr_ruta:
-                desplazar(arr_ruta)
-
             pts = np.array([barcode.polygon],np.int32)
             pts = pts.reshape((-1,1,2))
             cv2.polylines(img,[pts],True,(0,0,255),5)
@@ -45,21 +43,22 @@ def ReadQR():
             cv2.putText(img,('Paciente : ' +nombre_lectura),(pts2[0],pts2[1]-20),cv2.FONT_HERSHEY_SIMPLEX,0.9,(57,255,20),2)
             # return 
         cv2.imshow('Result',img)
+        if len(arr_ruta) != 0 :
+                desplazar(arr_ruta)
+                arr_ruta = cleanRoute()
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
             cv2.destroyAllWindows()
         
       
 def desplazar(arr_ruta):
-    pygame.init()
-    screen=pygame.display.set_mode((640,380))
     print(arr_ruta)
-
     for event in arr_ruta: 
         if event == 'w':
-            print("Adelante")
             servo_left.max()
             servo_right.min()
+            print("Adelante")
             time.sleep(0.5)
         
         elif event == 's':
@@ -79,11 +78,7 @@ def desplazar(arr_ruta):
             servo_right.max()
             servo_left.max()
             time.sleep(0.5)
-            
-        elif event.key == pygame.K_SPACE:
-            print("Detener")  
-
-ReadQR();
+    print("Ruta Terminada :)")
 
 def controlDistancia():
     pygame.init()
@@ -128,3 +123,6 @@ def controlDistancia():
                     servo_left.value = -0.13
                     servo_right.value = -0.20
                     print("Detener")
+
+
+ReadQR();
