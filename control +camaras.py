@@ -47,6 +47,9 @@ def ReadQR():
                 desplazar(arr_ruta)
                 arr_ruta = cleanRoute()
 
+        if cv2.waitKey(1) & 0xFF == ord('p'):
+            controlDistancia()
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
             cv2.destroyAllWindows()
