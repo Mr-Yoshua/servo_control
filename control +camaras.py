@@ -76,7 +76,7 @@ def desplazar(arr_ruta):
             servo_right.min()
             time.sleep(0.5)
             
-        elif 'd':
+        elif event == 'd':
             print("Derecha")
             servo_right.max()
             servo_left.max()
